@@ -24,7 +24,7 @@ def download_image(image_path):
     return send_file(image_path, as_attachment=True)
 
 @app.route('/', methods=["GET", "POST"])
-def sizeUp():
+def Red2Orange():
     img_dir = "static/imgs/"
     img_path = None
 
@@ -49,16 +49,16 @@ def sizeUp():
                 # ファイル名にユーザーIDを含めて保存
                 dt_now = datetime.datetime.now().strftime("%Y%m%d%H%M%S%f")
                 img_path = os.path.join(img_dir, hashed_user_id + "_" + dt_now + ".jpg")
-                out_path = os.path.join(img_dir, hashed_user_id + "_" + dt_now + "_sizeup" + ".jpg")
+                out_path = os.path.join(img_dir, hashed_user_id + "_" + dt_now + "_orange" + ".jpg")
 
                 cv2.imwrite(img_path, img)
 
-                # Real-ESRGAN処理実行
-                os.chdir('realesrgan/')
-                inputCommand = ['./realesrgan-ncnn-vulkan','-i', "../" + img_path,'-o', "../" + out_path]
-                subprocess.run(inputCommand)
-                print("realesrgan!!")
-                os.chdir('../')
+
+                #change colorファイル実行
+                inputCommand = [f"python change_color.py {img_path} {out_path}"]
+                subprocess.run(inputCommand, shell=True)
+                print("change color!!")
+
 
                 # セッションにハッシュ化したユーザーIDを保存
                 session['user_id'] = hashed_user_id
@@ -87,7 +87,7 @@ def download_image():
         img_dir = "static/imgs/"
         img_files = os.listdir(img_dir)
         for img_file in img_files:
-            if img_file.startswith(hashed_user_id) and img_file.endswith("_sizeup.jpg"):
+            if img_file.startswith(hashed_user_id) and img_file.endswith("_orange.jpg"):
                 img_path = os.path.join(img_dir, img_file)
                 return send_file(img_path, as_attachment=True)
 
