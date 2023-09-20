@@ -95,19 +95,7 @@ def Red2Orange():
 
                 # ZIPファイルを解凍
                 unzip_path = os.path.join(img_dir, hashed_user_id)
-                with ZipFile(zip_path, 'r') as zip_ref:
-                    for file_info in zip_ref.infolist():
-                        # ファイル名をCP437エンコーディングからShift-JISにデコード
-                        file_name = file_info.filename.encode('cp437').decode('shift-jis')
-                        # __MACOSXは無視
-                        if "__MACOSX" in file_name:
-                            continue
-                        print("file_name:", file_name)
-                        # ディレクトリ作成
-                        os.mkdir(os.path.join(img_dir, hashed_user_id, file_name))
-                        # ファイルを解凍
-                        with zip_ref.open(file_info) as source, open(os.path.join(unzip_path, "uploaded_folder.zip"), 'wb') as target:
-                            shutil.copyfileobj(source, target)
+                shutil.unpack_archive(zip_path, unzip_path)
                 
                 # 展開
                 book_path = os.path.join(unzip_path, zip_file.filename.split(".")[0])
@@ -115,7 +103,8 @@ def Red2Orange():
                     if path.endswith(".jpg"):
                         #ファイル名の先頭に時刻を追加する
                         dt_now = datetime.datetime.now().strftime("%Y%m%d%H%M%S%f")
-                        new_path = os.path.join(book_path, dt_now + "_" + path)
+                        #文字化け対策
+                        new_path = os.path.join(book_path, dt_now + "_medu4_" + path[-7:])
                         os.rename(os.path.join(book_path, path), new_path)
                         #change colorファイル実行
                         inputCommand = [f"python change_color.py {new_path}"]
@@ -161,7 +150,7 @@ def download_zip():
     img_dir = "static/imgs/"
 
     #uploaded_folder.zipを削除
-    os.remove(os.path.join(img_dir, hashed_user_id, "uploaded_folder.zip"))
+    # os.remove(os.path.join(img_dir, hashed_user_id, "uploaded_folder.zip"))
     #現在時刻取得
     dt_now = datetime.datetime.now().strftime("%Y%m%d%H%M%S%f")
 
@@ -169,8 +158,12 @@ def download_zip():
     books = os.listdir(os.path.join(img_dir, hashed_user_id))
     for book in books:
         #__MACOSXフォルダとダウンロード済みのフォルダは無視
-        if book != "__MACOSX" and not "downloaded" in book:
+        if book != "__MACOSX" and not "downloaded" in book and not ".zip" in book:
+            # ファイル名から時刻を削除
             source_dir = os.path.join(img_dir, hashed_user_id, book)
+            for file in os.listdir(source_dir):
+                new_file = file.split("_")[1] + "_" + file.split("_")[2]
+                os.rename(os.path.join(source_dir, file), os.path.join(source_dir, new_file))
             zip_file = f"{dt_now}_images.zip"
             shutil.make_archive("temp_directory", "zip", source_dir)
             shutil.move("temp_directory.zip", zip_file)
