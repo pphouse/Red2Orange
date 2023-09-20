@@ -1,43 +1,74 @@
-h1{
-    margin-left:10px;
+/* Reset some default styles */
+body, h1, p {
+    margin: 0;
+    padding: 0;
 }
 
-#dragDropArea{
-    background-color: #f4f4f4;
-    margin: 10px;
-    padding: 10px;
-    border: #ddd dashed 5px;
-    min-height: 200px;
-    width: 300px;
+/* Apply styles to header */
+header {
     text-align: center;
-}
-#dragDropArea p{
-    color: #999;
-    font-weight: bold;
-    font-size: 14px;
-    font-size: 1.4em;
-}
-#dragDropArea .drag-drop-buttons{
-    margin-top: 20px;
-    font-size: 12px;
-    font-size: 1.2em;
-}
-.drag-drop-buttons input{
-    margin: auto;
-}
-#flex{
-    display:flex;
-}
-#clearButton{
-    margin: 0 auto;
-}
-#sendButton{
-    margin-left:5px;
+    background-color: #00d924;
+    color: #FFFFFF;
+    padding: 20px 0;
 }
 
-#receiveImageArea{
-    margin: 10px;
-    padding: 10px;
-    min-height: 200px;
-    width: 300px;
+/* Apply styles to main content */
+main {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Apply styles to drag-drop area */
+.drop-area {
+    border: 2px dashed #00d924;
+    background-color: #F2F2F2;
+    text-align: center;
+    padding: 20px;
+}
+
+/* Apply styles to image preview */
+.image-preview {
+    margin-bottom: 20px;
+}
+
+/* Apply styles to custom file upload */
+.custom-file-upload {
+    display: inline-block;
+    background-color: #e8e8e8df;
+    color: #FFFFFF;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+/* Apply styles to action buttons */
+.action-button {
+    display: block;
+    width: 100%;
+    padding: 10px 0;
+    background-color: orange;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.clear-button {
+    margin-top: 20px;
+    background-color: #E74C3C;
+}
+
+.disabled-button {
+    background-color: #CCCCCC;
+    cursor: not-allowed;
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 768px) {
+    main {
+        padding: 10px;
+    }
 }

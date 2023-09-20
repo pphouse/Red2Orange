@@ -1,41 +1,42 @@
 <!DOCTYPE html>
 <html lang="ja">
-    <head>
-        <meta charset="UTF-8">
-        <title>medu4穴埋め色変換</title>
-        <link href="static/css/style.css" rel="stylesheet">
-    </head>
-    <body>
+<head>
+    <meta charset="UTF-8">
+    <title>medu4穴埋め色変換</title>
+    <link href="static/css/style.css" rel="stylesheet">
+</head>
+<body>
+    <header>
         <h1>medu4穴埋め色変換</h1>
-    
-        <form enctype="multipart/form-data">
-            <div id="flex">
-                <div id="dragDropArea">
-                    <div id="previewArea"></div>
-                    <div id="drag-drop-comment" class="drag-drop-inside">
-                        {% if not img_path %}
-                            <p class="drag-drop-info">ここにファイルをドロップ</p>
-                            <p>または</p>
-                            <p class="drag-drop-buttons">
-                            <input id="fileInput" type="file" accept="image/*" value="ファイルを選択" name="img" onChange="photoPreview(event)">
-                        {% else %}
-                            <img id="fileInput" src="{{ img_path }}">
-                        {% endif %}
+    </header>
+
+    <main>
+        <form enctype="multipart/form-data" class="upload-form">
+            <div id="dragDropArea" class="drop-area">
+                <div id="previewArea" class="image-preview"></div>
+                <div id="drag-drop-comment" class="drag-drop-inside">
+                    {% if not img_path %}
+                        <p class="drag-drop-info">ここにファイルをドロップ</p>
+                        <p>または</p>
+                        <label for="fileInput" class="custom-file-upload">
+                            
+                            <input id="fileInput" type="file" accept="image/*" name="img" onChange="photoPreview(event)">
+                        </label>
+                    {% else %}
+                        <img id="fileInput" src="{{ img_path }}" alt="Uploaded Image">
+                    {% endif %}
                 </div>
-            <!-- </div>
+            </div>
+
+            <button id="clearButton" type="reset" class="action-button clear-button">クリア</button>
             {% if not out_path %}
-                <img id="receiveImageArea"></img>
+                <button id="sendButton" type="submit" formmethod="post" class="action-button send-button">変換してダウンロード</button>
             {% else %}
-                <img id="receiveImageArea" src="{{ out_path }}"></img>
-            {% endif %}
-            </div> -->
-            <button id="clearButton" type="submit">クリア</button>
-            {% if not out_path %}
-                <button id="sendButton" type="submit" formmethod="post">変換してダウンロード</button>
-            {% else %}
-                <button disabled id="sendButton" type="submit" formmethod="post">変換してダウンロード</button>
+                <button disabled id="sendButton" type="submit" formmethod="post" class="action-button disabled-button">変換してダウンロード</button>
             {% endif %}
         </form>
-        <script type="text/javascript" src="static/js/client.js"></script>
-    </body>
+    </main>
+
+    <script type="text/javascript" src="static/js/client.js"></script>
+</body>
 </html>
