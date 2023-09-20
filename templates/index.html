@@ -28,11 +28,42 @@
                 </div>
             </div>
 
+
             <button id="clearButton" type="reset" class="action-button clear-button">クリア</button>
             {% if not out_path %}
-                <button id="sendButton" type="submit" formmethod="post" class="action-button send-button">変換してダウンロード</button>
+                <button id="sendButton" type="submit" name="button" value="button1" formmethod="post" class="action-button send-button">変換してダウンロード</button>
             {% else %}
-                <button disabled id="sendButton" type="submit" formmethod="post" class="action-button disabled-button">変換してダウンロード</button>
+                <button disabled id="sendButton" type="submit" vname="button" alue="button1" formmethod="post" class="action-button disabled-button">変換してダウンロード</button>
+            {% endif %}
+        </form>
+        <div>
+            <br>
+            <br>
+            <br>
+        </div>
+        <form enctype="multipart/form-data" class="upload-form">
+            <div id="dragDropArea" class="drop-area">
+                <div id="previewArea" class="image-preview"></div>
+                <div id="drag-drop-comment" class="drag-drop-inside">
+                    {% if not img_path %}
+                        <p class="drag-drop-info">ここにzipファイルをドロップ</p>
+                        <p>または</p>
+                        <label for="fileInput" class="custom-file-upload">
+                            
+                            <input id="fileInput" type="file" accept="application/zip" value="フォルダを選択" name="folder" onChange="folderPreview(event)">
+                        </label>
+                    {% else %}
+                        <img id="fileInput" src="{{ img_path }}" alt="Uploaded Image">
+                    {% endif %}
+                </div>
+            </div>
+
+
+            <button id="clearButton" type="reset" class="action-button clear-button">クリア</button>
+            {% if not out_path %}
+                <button id="sendButton" type="submit" name="button" value="button2" formmethod="post" class="action-button send-button">変換してダウンロード</button>
+            {% else %}
+                <button disabled id="sendButton" type="submit" name="button" value="button2" formmethod="post" class="action-button disabled-button">変換してダウンロード</button>
             {% endif %}
         </form>
     </main>

@@ -5,7 +5,6 @@ import cv2
 
 #画像が入っているディレクトリのパス
 img_path = sys.argv[1]
-out_path = sys.argv[2]
 
 def detect_rectangle_and_change_color(img_path, height):
     # 画像を読み込む
@@ -29,7 +28,7 @@ def detect_rectangle_and_change_color(img_path, height):
     print(f"サイズ {img.shape}")
 
     # 画像を保存
-    cv2.imwrite(out_path, img)
+    cv2.imwrite(img_path, img)
 
 # 実行
 detect_rectangle_and_change_color(img_path, 80)
