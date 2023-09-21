@@ -95,6 +95,8 @@ def Red2Orange():
                 # POSTにより受信したZIPファイルを保存
                 zip_file = request.files['folder']
                 zip_path = os.path.join(img_dir, hashed_user_id,  "uploaded_folder.zip")
+                os.mkdir(img_dir)
+                print("hashed_user_idのディレクトリ作ります!")
                 os.mkdir(os.path.join(img_dir, hashed_user_id))
                 zip_file.save(zip_path)
                 print("zip file 保存しました")
