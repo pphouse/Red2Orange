@@ -6,11 +6,12 @@ import numpy as np
 import hashlib
 import os
 import subprocess
-from flask import Flask, render_template, request, send_file, redirect, url_for, session
+from flask import Flask, render_template, request, send_file, redirect, url_for, session, jsonify
 from flask_session import Session
 import uuid  # ユーザーIDを生成するために使用
 
 app = Flask(__name__)
+
 
 # セッションをセットアップ
 app.config['SESSION_TYPE'] = 'filesystem'  # セッションデータをファイルに保存
@@ -21,6 +22,7 @@ Session(app)
 command = ["python", "deleteOldFiles.py"]
 proc = subprocess.Popen(command)
 
+
 def download_image(image_path):
     # 画像をダウンロード
     return send_file(image_path, as_attachment=True)
@@ -29,6 +31,8 @@ def download_image(image_path):
 def Red2Orange():
     img_dir = "static/imgs/"
     img_path = None
+    global progress
+    progress = 0
 
     if request.method == 'POST':
         try:
@@ -54,7 +58,8 @@ def Red2Orange():
 
                     # ユーザーIDのディレクトリ下に画像を保存
                     dt_now = datetime.datetime.now().strftime("%Y%m%d%H%M%S%f")
-                    img_path = os.path.join(img_dir, hashed_user_id, dt_now + "_" + request.files["img"].filename)
+                    # 文字化け対策
+                    img_path = os.path.join(img_dir, hashed_user_id, dt_now + "_medu4_" + request.files["img"].filename[-7:])
                     os.mkdir(os.path.join(img_dir, hashed_user_id))
                     cv2.imwrite(img_path, img)
 
@@ -99,7 +104,12 @@ def Red2Orange():
                 
                 # 展開
                 book_path = os.path.join(unzip_path, zip_file.filename.split(".")[0])
-                for path in os.listdir(book_path):
+                
+                for i, path in enumerate(os.listdir(book_path)):
+                    # 進捗バー
+                    progress = int(100*i/len(os.listdir(book_path)))+1
+                    print("progress:", progress)
+                    
                     if path.endswith(".jpg"):
                         #ファイル名の先頭に時刻を追加する
                         dt_now = datetime.datetime.now().strftime("%Y%m%d%H%M%S%f")
@@ -125,7 +135,7 @@ def Red2Orange():
             print(e)
             img_path = None
 
-    return render_template("index.html", img_path=img_path)
+    return render_template("index.html", img_path=img_path, progress=progress)
 
 @app.route('/download_image')
 def download_image():
@@ -137,7 +147,7 @@ def download_image():
     img_dir = "static/imgs/"
     img_files = os.listdir(os.path.join(img_dir, hashed_user_id))
     for img_file in img_files:
-        return send_file(img_dir + img_file, as_attachment=True, download_name=img_dir + img_file.split("_")[1])
+        return send_file(os.path.join(img_dir, hashed_user_id, img_file), as_attachment=True, download_name="_".join(img_file.split("_")[1:]))
 
     # ユーザーIDがない場合や処理実行後の画像が見つからない場合はエラーメッセージを表示
     return "ダウンロードする画像がありません"
@@ -172,6 +182,14 @@ def download_zip():
             os.rename(source_dir, os.path.join(img_dir, hashed_user_id, "downloaded_"+book))
             #zipファイルをダウンロード
             return send_file(zip_file, as_attachment=True, mimetype="application/zip", download_name=f"{dt_now}_images.zip")
+        
+@app.route('/get_progress')
+def get_progress():
+    # 仮の進捗情報を生成する（実際には進捗計算ロジックをここに追加）
+    global progress # 0から100の範囲の進捗
+
+    # 進捗情報をJSON形式でクライアントに返す
+    return jsonify(progress=progress)
 
 if __name__ == "__main__":
     app.run(debug=True)

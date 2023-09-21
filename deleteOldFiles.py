@@ -2,11 +2,24 @@ import os
 import schedule
 import time
 import shutil
+import glob
 
 def deleteOldFiles():
     try:
         # 削除対象となる経過時間（分）
-        elapsed_time = 5  
+        elapsed_time = 3
+
+        # zipファイルを削除
+        try:
+            # ワイルドカードに一致するファイルを取得
+            zip_files = glob.glob("*_images.zip")
+
+            # ファイルを削除
+            for zip_file in zip_files:
+                os.remove(zip_file)
+
+        except Exception as e:
+            print(f"Error: {e}")
 
         # imgs内のファイルを取得
         img_dir = "static/imgs/"

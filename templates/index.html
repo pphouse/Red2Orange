@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <title>medu4穴埋め色変換</title>
     <link href="static/css/style.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
 </head>
 <body>
     <header>
@@ -66,6 +70,35 @@
                 <button disabled id="sendButton" type="submit" name="button" value="button2" formmethod="post" class="action-button disabled-button">変換してダウンロード</button>
             {% endif %}
         </form>
+        <h1>進行状況</h1>
+    <div class="progress">
+        <div id="progress-bar" class="progress-bar" style="width:  0%"></div>
+
+    </div>
+
+    <script>
+        const progressBar = document.getElementById('progress-bar');
+
+        function updateProgressBar() {
+            // サーバーから進捗情報を取得するHTTPリクエストを送信
+            fetch('/get_progress')  // サーバーサイドのエンドポイントを指定
+                .then(response => response.json())
+                .then(data => {
+                    const progress = data.progress;
+                    progressBar.style.width = `${progress}%`;
+                })
+                .catch(error => {
+                    console.error('進捗情報の取得に失敗しました:', error);
+                });
+        }
+
+        // 3秒ごとに進捗情報を取得して進捗バーを更新
+        setInterval(updateProgressBar, 3000);
+
+    </script>
+
+    <!-- Bootstrap JavaScriptを読み込む -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     </main>
 
     <script type="text/javascript" src="static/js/client.js"></script>
