@@ -107,7 +107,8 @@ def Red2Orange():
                 print("zip file 解凍しました")
                 
                 # 展開
-                book_path = os.path.join(unzip_path, zip_file.filename.split(".")[0])
+                book_path = os.path.join(unzip_path, zip_file.filename.split(".zip")[0])
+                print("book_path:", book_path)
                 
                 for i, path in enumerate(os.listdir(book_path)):
                     # 進捗バー
@@ -174,6 +175,7 @@ def download_zip():
         #__MACOSXフォルダとダウンロード済みのフォルダは無視
         if book != "__MACOSX" and not "downloaded" in book and not ".zip" in book:
             # ファイル名から時刻を削除
+            print("download_zip!!")
             source_dir = os.path.join(img_dir, hashed_user_id, book)
             for file in os.listdir(source_dir):
                 new_file = file.split("_")[1] + "_" + file.split("_")[2]
