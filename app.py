@@ -60,6 +60,7 @@ def Red2Orange():
                     dt_now = datetime.datetime.now().strftime("%Y%m%d%H%M%S%f")
                     # 文字化け対策
                     img_path = os.path.join(img_dir, hashed_user_id, dt_now + "_medu4_" + request.files["img"].filename[-7:])
+                    os.mkdir(img_dir)
                     os.mkdir(os.path.join(img_dir, hashed_user_id))
                     cv2.imwrite(img_path, img)
 
