@@ -187,11 +187,14 @@ def download_zip():
         
 @app.route('/get_progress')
 def get_progress():
-    # 仮の進捗情報を生成する（実際には進捗計算ロジックをここに追加）
-    global progress # 0から100の範囲の進捗
+    try:
+        # 仮の進捗情報を生成する（実際には進捗計算ロジックをここに追加）
+        global progress # 0から100の範囲の進捗
 
-    # 進捗情報をJSON形式でクライアントに返す
-    return jsonify(progress=progress)
+        # 進捗情報をJSON形式でクライアントに返す
+        return jsonify(progress=progress)
+    except:
+        print("progressが定義されていないがスルーして良い")
 
 if __name__ == "__main__":
     app.run(debug=True)
