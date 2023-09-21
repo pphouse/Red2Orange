@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <title>medu4穴埋め色変換</title>
     <link href="static/css/style.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
 </head>
 <body>
     <header>
@@ -28,13 +32,73 @@
                 </div>
             </div>
 
+
             <button id="clearButton" type="reset" class="action-button clear-button">クリア</button>
             {% if not out_path %}
-                <button id="sendButton" type="submit" formmethod="post" class="action-button send-button">変換してダウンロード</button>
+                <button id="sendButton" type="submit" name="button" value="button1" formmethod="post" class="action-button send-button">変換してダウンロード</button>
             {% else %}
-                <button disabled id="sendButton" type="submit" formmethod="post" class="action-button disabled-button">変換してダウンロード</button>
+                <button disabled id="sendButton" type="submit" vname="button" alue="button1" formmethod="post" class="action-button disabled-button">変換してダウンロード</button>
             {% endif %}
         </form>
+        <div>
+            <br>
+            <br>
+            <br>
+        </div>
+        <form enctype="multipart/form-data" class="upload-form">
+            <div id="dragDropArea" class="drop-area">
+                <div id="previewArea" class="image-preview"></div>
+                <div id="drag-drop-comment" class="drag-drop-inside">
+                    {% if not img_path %}
+                        <p class="drag-drop-info">ここにzipファイルをドロップ</p>
+                        <p>または</p>
+                        <label for="fileInput" class="custom-file-upload">
+                            
+                            <input id="fileInput" type="file" accept="application/zip" value="フォルダを選択" name="folder" onChange="folderPreview(event)">
+                        </label>
+                    {% else %}
+                        <img id="fileInput" src="{{ img_path }}" alt="Uploaded Image">
+                    {% endif %}
+                </div>
+            </div>
+
+
+            <button id="clearButton" type="reset" class="action-button clear-button">クリア</button>
+            {% if not out_path %}
+                <button id="sendButton" type="submit" name="button" value="button2" formmethod="post" class="action-button send-button">変換してダウンロード</button>
+            {% else %}
+                <button disabled id="sendButton" type="submit" name="button" value="button2" formmethod="post" class="action-button disabled-button">変換してダウンロード</button>
+            {% endif %}
+        </form>
+        <h1>進行状況</h1>
+    <div class="progress">
+        <div id="progress-bar" class="progress-bar" style="width:  0%"></div>
+
+    </div>
+
+    <script>
+        const progressBar = document.getElementById('progress-bar');
+
+        function updateProgressBar() {
+            // サーバーから進捗情報を取得するHTTPリクエストを送信
+            fetch('/get_progress')  // サーバーサイドのエンドポイントを指定
+                .then(response => response.json())
+                .then(data => {
+                    const progress = data.progress;
+                    progressBar.style.width = `${progress}%`;
+                })
+                .catch(error => {
+                    console.error('進捗情報の取得に失敗しました:', error);
+                });
+        }
+
+        // 3秒ごとに進捗情報を取得して進捗バーを更新
+        setInterval(updateProgressBar, 3000);
+
+    </script>
+
+    <!-- Bootstrap JavaScriptを読み込む -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     </main>
 
     <script type="text/javascript" src="static/js/client.js"></script>
