@@ -199,6 +199,7 @@ def get_progress():
         return jsonify(progress=progress)
     except:
         print("progressが定義されていないがスルーして良い")
+        return None
 
 if __name__ == "__main__":
     app.run(debug=True)
