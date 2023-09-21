@@ -97,10 +97,12 @@ def Red2Orange():
                 zip_path = os.path.join(img_dir, hashed_user_id,  "uploaded_folder.zip")
                 os.mkdir(os.path.join(img_dir, hashed_user_id))
                 zip_file.save(zip_path)
+                print("zip file 保存しました")
 
                 # ZIPファイルを解凍
                 unzip_path = os.path.join(img_dir, hashed_user_id)
                 shutil.unpack_archive(zip_path, unzip_path)
+                print("zip file 解凍しました")
                 
                 # 展開
                 book_path = os.path.join(unzip_path, zip_file.filename.split(".")[0])
